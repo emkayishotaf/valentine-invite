@@ -63,38 +63,45 @@
     </div>
 
     <script>
-        // Function to move the "No" button
-        function moveButton() {
-            const noBtn = document.getElementById('noBtn');
-            const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
-            const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
-            
-            noBtn.style.left = x + 'px';
-            noBtn.style.top = y + 'px';
-        }
+       // Refined function to keep the button within the "play area"
+    function moveButton() {
+        const noBtn = document.getElementById('noBtn');
+        
+        // Calculate the maximum allowed positions
+        // We subtract a small padding (20px) to keep it away from the very edge
+        const maxX = window.innerWidth - noBtn.offsetWidth - 20;
+        const maxY = window.innerHeight - noBtn.offsetHeight - 20;
 
-        // What happens when they click Yes
-        function accepted() {
-            document.body.innerHTML = `
-                <div class="card">
-                    <h1>Yay! I knew you'd say yes! 🥰</h1>
-                    <p>Pack your bags, Pretoria is waiting!</p>
-                    <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHp1eXF6YmswdGZ6YmswdGZ6YmswdGZ6YmswdGZ6YmswdGZ6JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCtmYWN0b3J5L2dpZl9zZWFyY2gmY3Q9Zw/v1.Y2lkPTc5MGI3NjExOHp1eXF6YmswdGZ6YmswdGZ6YmswdGZ6YmswdGZ6YmswdGZ6JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCtmYWN0b3J5L2dpZl9zZWFyY2gmY3Q9Zw/kZzua9fSAb9S6T72QJ/giphy.gif" width="250">
-                </div>`;
-            // Optional: document.location.href = "YOUR_BOOKING_LINK_HERE";
-        }
+        // Ensure the random number is within 0 and Max
+        // We use Math.max(0, ...) just in case the screen is tiny
+        const x = Math.max(0, Math.floor(Math.random() * maxX));
+        const y = Math.max(0, Math.floor(Math.random() * maxY));
+        
+        // Apply the new coordinates
+        noBtn.style.left = x + 'px';
+        noBtn.style.top = y + 'px';
+    }
 
-        // Create floating hearts background
-        function createHeart() {
-            const heart = document.createElement('div');
-            heart.classList.add('heart');
-            heart.innerHTML = '❤️';
-            heart.style.left = Math.random() * 100 + 'vw';
-            heart.style.animationDuration = Math.random() * 3 + 2 + 's';
-            document.body.appendChild(heart);
-            setTimeout(() => heart.remove(), 5000);
-        }
-        setInterval(createHeart, 300);
-    </script>
+    function accepted() {
+        document.body.innerHTML = `
+            <div class="card">
+                <h1>Yay! I knew you'd say yes! 🥰</h1>
+                <p>Pack your bags, Pretoria is waiting!</p>
+                <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHp1eXF6YmswdGZ6YmswdGZ6YmswdGZ6YmswdGZ6YmswdGZ6JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCtmYWN0b3J5L2dpZl9zZWFyY2gmY3Q9Zw/kZzua9fSAb9S6T72QJ/giphy.gif" width="250">
+            </div>`;
+    }
+
+    // Floating hearts background
+    function createHeart() {
+        const heart = document.createElement('div');
+        heart.classList.add('heart');
+        heart.innerHTML = '❤️';
+        heart.style.left = Math.random() * 100 + 'vw';
+        heart.style.animationDuration = Math.random() * 3 + 2 + 's';
+        document.body.appendChild(heart);
+        setTimeout(() => heart.remove(), 5000);
+    }
+    setInterval(createHeart, 300);
+    <script>
 </body>
 </html>

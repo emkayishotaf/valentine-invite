@@ -24,10 +24,10 @@
             z-index: 10;
             max-width: 400px;
             width: 90%;
+            position: relative;
         }
         h1 { color: #d63384; font-size: 1.8rem; margin-bottom: 1.5rem; }
         .btn-container { 
-            position: relative; 
             height: 120px; 
             display: flex; 
             justify-content: center; 
@@ -40,23 +40,27 @@
             border-radius: 50px;
             border: none;
             cursor: pointer;
+            z-index: 20;
         }
-        #yesBtn { background-color: #ff4d4d; color: white; margin-right: 10px; }
+        #yesBtn { background-color: #ff4d4d; color: white; }
         #noBtn { 
             background-color: #888; 
             color: white; 
-            position: absolute; 
-            z-index: 999; /* Ensures it stays above EVERYTHING */
-            transition: 0.1s ease;
-            /* Initial placement so it's visible on load */
-            left: 60%; 
+            position: fixed; /* Fixed to viewport for easier "running away" logic */
+            transition: all 0.15s ease-out;
+            z-index: 999;
+            /* Default starting position */
+            top: 55%;
+            left: 55%;
         }
+        img { border-radius: 15px; margin-bottom: 1rem; }
         .heart {
             position: absolute;
             color: #ffb3b3;
             font-size: 20px;
             animation: float 5s infinite linear;
             opacity: 0.7;
+            z-index: 1;
         }
         @keyframes float {
             0% { transform: translateY(100vh) rotate(0deg); opacity: 1; }
@@ -75,32 +79,33 @@
     </div>
 
     <script>
+        // 1. Personalization (Pulling name from URL)
         const urlParams = new URLSearchParams(window.location.search);
         const herName = urlParams.get('name');
         if (herName) {
             document.getElementById('questionText').innerText = herName + ", will you be my Valentine? ❤️";
         }
 
+        // 2. The Runaway "No" Button
         function moveButton() {
             const noBtn = document.getElementById('noBtn');
             const padding = 50;
             
-            // Get viewport dimensions
+            // Boundary calculation: stay within visible window
             const maxX = window.innerWidth - noBtn.offsetWidth - padding;
             const maxY = window.innerHeight - noBtn.offsetHeight - padding;
 
-            // Generate random coordinates within the viewport
-            const randomX = Math.floor(Math.random() * maxX);
-            const randomY = Math.floor(Math.random() * maxY);
+            // Generate random placement
+            const randomX = Math.max(padding, Math.floor(Math.random() * maxX));
+            const randomY = Math.max(padding, Math.floor(Math.random() * maxY));
 
-            // Set new position
             noBtn.style.left = randomX + 'px';
             noBtn.style.top = randomY + 'px';
         }
 
+        // 3. Success & Notification
         async function accepted() {
-            // Replace with your actual key from Web3Forms
-            const accessKey = "YOUR_WEB3FORMS_KEY_HERE"; 
+            const accessKey = "YOUR_WEB3FORMS_KEY_HERE"; // Get this at web3forms.com
             
             if (accessKey !== "YOUR_WEB3FORMS_KEY_HERE") {
                 fetch('https://api.web3forms.com/submit', {
@@ -108,19 +113,23 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         access_key: accessKey,
-                        subject: "VALENTINE UPDATE",
-                        message: (herName || "Someone") + " said YES!"
+                        subject: "VALENTINE ALERT",
+                        message: (herName || "Someone") + " just said YES!"
                     })
                 });
             }
 
             document.getElementById('mainCard').innerHTML = `
-                <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHp1eXF6YmswdGZ6YmswdGZ6YmswdGZ6YmswdGZ6YmswdGZ6JmVwPXYxX2ludGVybmFs_giZl9ieV9pZCtmYWN0b3J5L2dpZl9zZWFyY2gmY3Q9Zw/kZzua9fSAb9S6T72QJ/giphy.gif" width="250">
+                <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHp1eXF6YmswdGZ6YmswdGZ6YmswdGZ6YmswdGZ6YmswdGZ6JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCtmYWN0b3J5L2dpZl9zZWFyY2gmY3Q9Zw/kZzua9fSAb9S6T72QJ/giphy.gif" width="250">
                 <h1>Yay! I knew you'd say yes! 🥰</h1>
-                <p>Pack your bags, Pretoria is waiting!</p>
+                <p>Prepare for our Pretoria date! 🥂</p>
             `;
+            
+            // Remove the rogue "No" button once they say yes
+            document.getElementById('noBtn').style.display = 'none';
         }
 
+        // 4. Background Decor
         function createHeart() {
             const heart = document.createElement('div');
             heart.classList.add('heart');

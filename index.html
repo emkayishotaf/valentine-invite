@@ -71,7 +71,7 @@
 <body>
     <div class="card" id="mainCard">
         <img id="displayGif" src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHp1eXF6YmswdGZ6YmswdGZ6YmswdGZ6YmswdGZ6YmswdGZ6JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCtmYWN0b3J5L2dpZl9zZWFyY2gmY3Q9Zw/MDJ9IbxxvDUQM/giphy.gif" width="180">
-        <h1 id="questionText">Will you be my Valentine? ❤️</h1>
+        <h1 id="questionText"> Thuli Will you be my Valentine? ❤️</h1>
         <div class="btn-container">
             <button id="yesBtn" onclick="accepted()">Yes!</button>
             <button id="noBtn" onmouseover="moveButton()" onclick="moveButton()">No</button>
@@ -82,8 +82,8 @@
         // 1. Personalization (Pulling name from URL)
         const urlParams = new URLSearchParams(window.location.search);
         const herName = urlParams.get('name');
-        if (herName) {
-            document.getElementById('questionText').innerText = herName + ", will you be my Valentine? ❤️";
+        if (Thuli) {
+            document.getElementById('questionText').innerText = Thuli + ", will you be my Valentine? ❤️";
         }
 
         // 2. The Runaway "No" Button
@@ -122,7 +122,7 @@
             document.getElementById('mainCard').innerHTML = `
                 <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHp1eXF6YmswdGZ6YmswdGZ6YmswdGZ6YmswdGZ6YmswdGZ6JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCtmYWN0b3J5L2dpZl9zZWFyY2gmY3Q9Zw/kZzua9fSAb9S6T72QJ/giphy.gif" width="250">
                 <h1>Yay! I knew you'd say yes! 🥰</h1>
-                <p>Prepare for our Pretoria date! 🥂</p>
+                <p>Prepare for our date in Pretoria! 🥂</p>
             `;
             
             // Remove the rogue "No" button once they say yes

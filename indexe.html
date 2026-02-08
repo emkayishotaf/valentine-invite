@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Special Question...</title>
+    <style>
+        body {
+            background-color: #ffe6e6; /* Soft pink */
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+            text-align: center;
+        }
+        .card {
+            background: white;
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            z-index: 10;
+        }
+        h1 { color: #d63384; margin-bottom: 2rem; }
+        .btn-container { position: relative; height: 100px; }
+        button {
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            border-radius: 10px;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        #yesBtn { background-color: #ff4d4d; color: white; margin-right: 20px; }
+        #noBtn { background-color: #888; color: white; position: absolute; }
+        
+        /* Floating hearts decoration */
+        .heart {
+            position: absolute;
+            color: #ffb3b3;
+            font-size: 20px;
+            animation: float 5s infinite linear;
+            opacity: 0.7;
+        }
+        @keyframes float {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1 id="question">Will you be my Valentine? ❤️</h1>
+        <div id="image-container">
+            <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHp1eXF6YmswdGZ6YmswdGZ6YmswdGZ6YmswdGZ6YmswdGZ6JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCtmYWN0b3J5L2dpZl9zZWFyY2gmY3Q9Zw/MDJ9IbxxvDUQM/giphy.gif" width="150">
+        </div>
+        <div class="btn-container">
+            <button id="yesBtn" onclick="accepted()">Yes!</button>
+            <button id="noBtn" onmouseover="moveButton()">No</button>
+        </div>
+    </div>
+
+    <script>
+        // Function to move the "No" button
+        function moveButton() {
+            const noBtn = document.getElementById('noBtn');
+            const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
+            const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
+            
+            noBtn.style.left = x + 'px';
+            noBtn.style.top = y + 'px';
+        }
+
+        // What happens when they click Yes
+        function accepted() {
+            document.body.innerHTML = `
+                <div class="card">
+                    <h1>Yay! I knew you'd say yes! 🥰</h1>
+                    <p>Pack your bags, Pretoria is waiting!</p>
+                    <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHp1eXF6YmswdGZ6YmswdGZ6YmswdGZ6YmswdGZ6YmswdGZ6JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCtmYWN0b3J5L2dpZl9zZWFyY2gmY3Q9Zw/v1.Y2lkPTc5MGI3NjExOHp1eXF6YmswdGZ6YmswdGZ6YmswdGZ6YmswdGZ6YmswdGZ6JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCtmYWN0b3J5L2dpZl9zZWFyY2gmY3Q9Zw/kZzua9fSAb9S6T72QJ/giphy.gif" width="250">
+                </div>`;
+            // Optional: document.location.href = "YOUR_BOOKING_LINK_HERE";
+        }
+
+        // Create floating hearts background
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            heart.innerHTML = '❤️';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = Math.random() * 3 + 2 + 's';
+            document.body.appendChild(heart);
+            setTimeout(() => heart.remove(), 5000);
+        }
+        setInterval(createHeart, 300);
+    </script>
+</body>
+</html>

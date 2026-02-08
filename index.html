@@ -6,7 +6,7 @@
     <title>A Special Question...</title>
     <style>
         body {
-            background-color: #ffe6e6; /* Soft pink */
+            background-color: #ffe6e6;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             display: flex;
             justify-content: center;
@@ -40,16 +40,17 @@
             border-radius: 50px;
             border: none;
             cursor: pointer;
-            transition: transform 0.2s;
         }
-        #yesBtn { background-color: #ff4d4d; color: white; z-index: 11; }
+        #yesBtn { background-color: #ff4d4d; color: white; margin-right: 10px; }
         #noBtn { 
             background-color: #888; 
             color: white; 
             position: absolute; 
+            z-index: 999; /* Ensures it stays above EVERYTHING */
             transition: 0.1s ease;
+            /* Initial placement so it's visible on load */
+            left: 60%; 
         }
-        img { border-radius: 15px; margin-bottom: 1rem; }
         .heart {
             position: absolute;
             color: #ffb3b3;
@@ -74,33 +75,33 @@
     </div>
 
     <script>
-        // 1. PERSONALIZATION LOGIC
         const urlParams = new URLSearchParams(window.location.search);
         const herName = urlParams.get('name');
         if (herName) {
             document.getElementById('questionText').innerText = herName + ", will you be my Valentine? ❤️";
         }
 
-        // 2. DODGING BUTTON LOGIC (Strict Boundaries)
         function moveButton() {
             const noBtn = document.getElementById('noBtn');
-            const padding = 30;
-            // Subtract button size and padding from total screen area
+            const padding = 50;
+            
+            // Get viewport dimensions
             const maxX = window.innerWidth - noBtn.offsetWidth - padding;
             const maxY = window.innerHeight - noBtn.offsetHeight - padding;
 
+            // Generate random coordinates within the viewport
             const randomX = Math.floor(Math.random() * maxX);
             const randomY = Math.floor(Math.random() * maxY);
 
+            // Set new position
             noBtn.style.left = randomX + 'px';
             noBtn.style.top = randomY + 'px';
         }
 
-        // 3. NOTIFICATION & SUCCESS LOGIC
         async function accepted() {
-            const accessKey = "YOUR_WEB3FORMS_KEY_HERE"; // <--- CHANGE THIS KEY
+            // Replace with your actual key from Web3Forms
+            const accessKey = "YOUR_WEB3FORMS_KEY_HERE"; 
             
-            // Send notification silently in the background
             if (accessKey !== "YOUR_WEB3FORMS_KEY_HERE") {
                 fetch('https://api.web3forms.com/submit', {
                     method: 'POST',
@@ -108,20 +109,18 @@
                     body: JSON.stringify({
                         access_key: accessKey,
                         subject: "VALENTINE UPDATE",
-                        message: (herName || "Someone") + " said YES! Time to book Pretoria!"
+                        message: (herName || "Someone") + " said YES!"
                     })
                 });
             }
 
-            // Update UI
             document.getElementById('mainCard').innerHTML = `
-                <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHp1eXF6YmswdGZ6YmswdGZ6YmswdGZ6YmswdGZ6YmswdGZ6JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCtmYWN0b3J5L2dpZl9zZWFyY2gmY3Q9Zw/kZzua9fSAb9S6T72QJ/giphy.gif" width="250">
+                <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHp1eXF6YmswdGZ6YmswdGZ6YmswdGZ6YmswdGZ6YmswdGZ6JmVwPXYxX2ludGVybmFs_giZl9ieV9pZCtmYWN0b3J5L2dpZl9zZWFyY2gmY3Q9Zw/kZzua9fSAb9S6T72QJ/giphy.gif" width="250">
                 <h1>Yay! I knew you'd say yes! 🥰</h1>
-                <p>Check your WhatsApp for the Pretoria details!</p>
+                <p>Pack your bags, Pretoria is waiting!</p>
             `;
         }
 
-        // 4. DECORATION: FLOATING HEARTS
         function createHeart() {
             const heart = document.createElement('div');
             heart.classList.add('heart');

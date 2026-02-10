@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Special Question...</title>
+    <style>
+        body {
+            background-color: #ffe6e6;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+            text-align: center;
+        }
+        .card {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            z-index: 10;
+            max-width: 400px;
+            width: 90%;
+            position: relative;
+        }
+        h1 { color: #d63384; font-size: 1.8rem; margin-bottom: 1.5rem; }
+        .btn-container { 
+            height: 120px; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center;
+        }
+        button {
+            padding: 12px 25px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border-radius: 50px;
+            border: none;
+            cursor: pointer;
+            z-index: 20;
+        }
+        #yesBtn { background-color: #ff4d4d; color: white; }
+        #noBtn { 
+            background-color: #888; 
+            color: white; 
+            position: fixed; /* Fixed to viewport for easier "running away" logic */
+            transition: all 0.15s ease-out;
+            z-index: 999;
+            /* Default starting position */
+            top: 55%;
+            left: 55%;
+        }
+        img { border-radius: 15px; margin-bottom: 1rem; }
+        .heart {
+            position: absolute;
+            color: #ffb3b3;
+            font-size: 20px;
+            animation: float 5s infinite linear;
+            opacity: 0.7;
+            z-index: 1;
+        }
+        @keyframes float {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="card" id="mainCard">
+        <img id="displayGif" src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHp1eXF6YmswdGZ6YmswdGZ6YmswdGZ6YmswdGZ6YmswdGZ6JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCtmYWN0b3J5L2dpZl9zZWFyY2gmY3Q9Zw/MDJ9IbxxvDUQM/giphy.gif" width="180">
+        <h1 id="questionText"> Thuli Will you be my Valentine? ❤️</h1>
+        <div class="btn-container">
+            <button id="yesBtn" onclick="accepted()">Yes!</button>
+            <button id="noBtn" onmouseover="moveButton()" onclick="moveButton()">No</button>
+        </div>
+    </div>
+
+    <script>
+        // 1. Personalization (Pulling name from URL)
+        const urlParams = new URLSearchParams(window.location.search);
+        const herName = urlParams.get('name');
+        if (Flatin) {
+            document.getElementById('questionText').innerText = Flatin + ", will you be my Valentine? ❤️";
+        }
+
+        // 2. The Runaway "No" Button
+        function moveButton() {
+            const noBtn = document.getElementById('noBtn');
+            const padding = 50;
+            
+            // Boundary calculation: stay within visible window
+            const maxX = window.innerWidth - noBtn.offsetWidth - padding;
+            const maxY = window.innerHeight - noBtn.offsetHeight - padding;
+
+            // Generate random placement
+            const randomX = Math.max(padding, Math.floor(Math.random() * maxX));
+            const randomY = Math.max(padding, Math.floor(Math.random() * maxY));
+
+            noBtn.style.left = randomX + 'px';
+            noBtn.style.top = randomY + 'px';
+        }
+
+        // 3. Success & Notification
+        async function accepted() {
+            const accessKey = "2d29ab90-fcb1-4910-801b-2d0cfc8acf6c"; // Get this at web3forms.com
+            
+            if (accessKey !== "YOUR_WEB3FORMS_KEY_HERE") {
+                fetch('https://api.web3forms.com/submit', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        access_key: accessKey,
+                        subject: "VALENTINE ALERT",
+                        message: (herName || "Someone") + " just said YES!"
+                    })
+                });
+            }
+
+            document.getElementById('mainCard').innerHTML = `
+                <img src="Whim.jpeg" width="250" style="border-radius: 20px; margin-bottom: 15px;">
+                <h1>Yay! I knew you'd say yes! 🥰</h1>
+                <p>Prepare for our date in Pretoria! 🥂</p>
+            `;
+            
+            // Remove the rogue "No" button once they say yes
+            document.getElementById('noBtn').style.display = 'none';
+        }
+
+        // 4. Background Decor
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            heart.innerHTML = '❤️';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = (Math.random() * 3 + 2) + 's';
+            document.body.appendChild(heart);
+            setTimeout(() => heart.remove(), 5000);
+        }
+        setInterval(createHeart, 300);
+    </script>
+</body>
+</html>
